@@ -82,8 +82,8 @@ public class Juego extends JFrame implements Runnable, KeyListener,
         vidas = 5;  //Numero de vidas
         desaparece = false; //Bool inicia en falso
         numBolas = 0;  //Contador empieza en 0
-        velXBola = 1;   //Velocidad bola en X
-        velYBola = 1; //Velocidad bola en Y
+        velXBola = 2;   //Velocidad bola en X
+        velYBola = 2; //Velocidad bola en Y
         click = false; //Empieza en falso hasta que mouse presiona sobre objeto bola
         pausa = false;	//Empieza en falso hasta que se presiona la letra "P"
         guarda = false; //Empieza en falso hasta que se presiona la letra "G"
@@ -197,13 +197,19 @@ public class Juego extends JFrame implements Runnable, KeyListener,
 
         //Actualiza la animación de bola al hacer el click, en base al tiempo transcurrido
         if (click) {
+            //Genera un numero random para velocidades
+            Random r = new Random();
+            velXBola = r.nextInt(getHeight() / 8);
+            velYBola = r.nextInt(getWidth() / 8);
+
             animaBola.actualiza(tiempoTranscurrido);
+            bola.setPosX(bola.getPosX() + velXBola);
+            bola.setPosY(bola.getPosY() + (velYBola - 3));
         }
         //Actualiza la animación de canasta cuando se mueve, en base al tiempo transcurrido
         if (direccion != 0) {
             animaCanasta.actualiza(tiempoTranscurrido);
         }
-
         // Actualiza posicion de la canasta por teclado
         if (direccion == 1) {
             canasta.setPosX(canasta.getPosX() + 5);
@@ -394,7 +400,7 @@ public class Juego extends JFrame implements Runnable, KeyListener,
      * sobre la bola.
      */
     public void mousePressed(MouseEvent e) {
-        if (e.getX() >= bola.getPosX() && e.getX() <= bola.getAncho() && e.getY() >= bola.getPosY() && e.getY() <= bola.getAlto()) {
+        if ((e.getPoint().distance(bola.getPosX(), bola.getPosY()) < bola.getAncho()) && (e.getPoint().distance(bola.getPosX(), bola.getPosY()) >= 0)) {
             click = true; //al presionar mouse sobre bola, variable es verdadera
         }
     }
