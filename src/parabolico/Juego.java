@@ -242,11 +242,15 @@ public class Juego extends JFrame implements Runnable, KeyListener,
         //Checa colison de la bola con Applet
         //Checa colision de la bola con la parte inferior del applet.
         if (bola.getPosY() + bola.getAlto() > getHeight()) {
-            bola.setPosY(getHeight() - bola.getAlto());
             numBolas++;
             if (sonido) {
                 sad.play();  // suena al chocar con el piso
             }
+            posBX = (getWidth() / 4);   // posision x es un cuarto del applet
+            posBY = (getHeight() / 2);    // posicion en y es la mitad del applet
+            //Mueve bola a pos inicial en X y Y
+            bola.setPosX(posBX - bola.getAlto());
+            bola.setPosY(posBY - bola.getAncho());
             click = false;
         }
         //Checa colision de la bola con la parte superior del applet.
@@ -260,18 +264,18 @@ public class Juego extends JFrame implements Runnable, KeyListener,
 
         //Colision entre bola y canasta
         if (canasta.intersecta(bola)) {
-                desaparece = true;
-                if (sonido) {
-                    joy.play();    //sad al colisionar
-                }
-                bola.aumentaConteo();   // Aumenta el score
-                posBX = (getWidth() / 4);   // posision x es un cuarto del applet
-                posBY = (getHeight() / 2);    // posicion en y es la mitad del applet
-                //Mueve bola a pos inicial en X y Y
-                bola.setPosX(posBX - bola.getAlto());
-                bola.setPosY(posBY - bola.getAncho());
-                click = false;
+            desaparece = true;
+            if (sonido) {
+                joy.play();    //sad al colisionar
             }
+            bola.aumentaConteo();   // Aumenta el score
+            posBX = (getWidth() / 4);   // posision x es un cuarto del applet
+            posBY = (getHeight() / 2);    // posicion en y es la mitad del applet
+            //Mueve bola a pos inicial en X y Y
+            bola.setPosX(posBX - bola.getAlto());
+            bola.setPosY(posBY - bola.getAncho());
+            click = false;
+        }
     }
 
     /**
