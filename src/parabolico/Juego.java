@@ -21,6 +21,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.net.URL;
 import javax.swing.ImageIcon;
 import java.util.Random;
 
@@ -55,7 +56,8 @@ public class Juego extends JFrame implements Runnable, KeyListener,
     private int numBolas; // Cuenta las bolas que caen
     private final int MIN = -5;    //Minimo al generar un numero al azar.
     private final int MAX = 6;    //Maximo al generar un numero al azar.
-    private Image dbImage;	// Imagen a proyectar	
+    private Image dbImage;	// Imagen a proyectar
+    private Image BKG;  //Imagen de fondo
     private Graphics dbg;	// Objeto grafico
     private SoundClip sad;    // Objeto AudioClip
     private SoundClip joy; //Obbjeto AudioClip
@@ -94,7 +96,8 @@ public class Juego extends JFrame implements Runnable, KeyListener,
         mouseY = posBY; //posicion del mouse temporal, inicial de la bola en Y
         int posCX = (getWidth() / 4);   // posision de canasta en X es un cuarto del applet
         int posCY = (getHeight() - (getHeight() / 4));    // posicion de canasta en Y es 3/4 del applet
-        setBackground(Color.blue); //Se selecciona el color para el fondo
+        setBackground(Color.BLUE);
+        BKG = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("BKG.png"));
 
         addKeyListener(this);
         addMouseListener(this);
@@ -480,6 +483,9 @@ public class Juego extends JFrame implements Runnable, KeyListener,
         if (!pausa && !instrucciones && !guarda) {
             if (canasta != null && bola != null) {
                 if (vidas > 0) {
+                    //Dibuja imagen de fondo
+                    g.drawImage(BKG, 0, 0, this);
+
                     //Dibuja la imagen en la posicion actualizada de la canasta
                     g.drawImage(canasta.getImagenI(), canasta.getPosX(), canasta.getPosY(), this);
 
