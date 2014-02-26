@@ -500,13 +500,13 @@ public class Juego extends JFrame implements Runnable, KeyListener,
 
                     if (desaparece) {
                         //Despliega el string sobre la canasta
-                        g.setColor(Color.white);
+                        g.setColor(Color.BLACK);
                         g.setFont(new Font("Helvetica", Font.BOLD, 14));
                         g.drawString(canasta.getStr1(), (canasta.getPosX() - 8), (canasta.getPosY() - 5));
                     }
                     desaparece = false; //Reinicia variable bool con false
 
-                    g.setColor(Color.white);
+                    g.setColor(Color.BLACK);
                     g.setFont(new Font("Helvetica", Font.BOLD, 18));
                     g.drawString("Score: " + bola.getConteo(), 120, 40); //Despliega el score
                     g.drawString("Vidas: " + vidas, 30, 40); //Despliega vidas
@@ -517,7 +517,7 @@ public class Juego extends JFrame implements Runnable, KeyListener,
                     g.setFont(new Font("Helvetica", Font.BOLD, 18));
                     g.drawString("GAME OVER", (getWidth() / 2) - 20, 40); //Despliega "GAME OVER"
                     //Despliega Creditos
-                    g.setColor(Color.white);
+                    g.setColor(Color.BLACK);
                     g.drawString("Marco Ramírez A01191344", (getWidth() / 2) - 50, (getHeight() / 2) - 30);
                     g.drawString("Alfredo Altamirano A011911", (getWidth() / 2) - 50, getHeight() / 2);
                 }
