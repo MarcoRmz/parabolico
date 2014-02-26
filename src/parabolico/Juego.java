@@ -204,7 +204,7 @@ public class Juego extends JFrame implements Runnable, KeyListener,
 
             animaBola.actualiza(tiempoTranscurrido);
             bola.setPosX(bola.getPosX() + velXBola);
-            bola.setPosY(bola.getPosY() + (velYBola - 3));
+            bola.setPosY(bola.getPosY() - (velYBola + 3));
         }
         //Actualiza la animación de canasta cuando se mueve, en base al tiempo transcurrido
         if (direccion != 0) {
@@ -513,11 +513,11 @@ public class Juego extends JFrame implements Runnable, KeyListener,
                 }
                 else {
                     //Despliega "GAME OVER" y los creditos
-                    g.setColor(Color.red);
-                    g.setFont(new Font("Helvetica", Font.BOLD, 18));
-                    g.drawString("GAME OVER", (getWidth() / 2) - 20, 40); //Despliega "GAME OVER"
+                    g.setColor(Color.RED);
+                    g.setFont(new Font("Helvetica", Font.BOLD, 20));
+                    g.drawString("GAME OVER", (getWidth() / 2) - 20, 90); //Despliega "GAME OVER"
                     //Despliega Creditos
-                    g.setColor(Color.BLACK);
+                    g.setColor(Color.WHITE);
                     g.drawString("Marco Ramírez A01191344", (getWidth() / 2) - 50, (getHeight() / 2) - 30);
                     g.drawString("Alfredo Altamirano A011911", (getWidth() / 2) - 50, getHeight() / 2);
                 }
@@ -537,7 +537,7 @@ public class Juego extends JFrame implements Runnable, KeyListener,
         }
         else if (instrucciones) {
             g.setColor(Color.white);
-            g.setFont(new Font("Helvetica", Font.BOLD, 18));
+            g.setFont(new Font("Helvetica", Font.BOLD, 20));
             //Despliega las instrucciones
             g.drawString("Instrucciones", (getWidth() / 2) - 80, (getHeight() / 2) - 70);
             g.drawString("-Click sobre la bola para disparar", (getWidth() / 2) - 130, (getHeight() / 2) - 30);
