@@ -218,6 +218,7 @@ public class Juego extends JFrame implements Runnable, KeyListener,
         
         //Checa bolas caidas, si son 3, decrementa vida y aumenta vel en X y Y
         if (numBolas == 3) {
+            numBolas = 0;
             vidas--;
             velXBola++;
             velYBola++;
@@ -407,7 +408,7 @@ public class Juego extends JFrame implements Runnable, KeyListener,
             click = true; //al presionar mouse sobre bola, variable es verdadera
             //Genera un numero random para velocidades
             Random r = new Random();
-            velXBola = r.nextInt(5) + 5;
+            velXBola = r.nextInt(4) + 5;
             velYBola = -r.nextInt(10) - 5;
         }
     }
@@ -521,10 +522,11 @@ public class Juego extends JFrame implements Runnable, KeyListener,
                 else {
                     //Despliega "GAME OVER" y los creditos
                     g.setColor(Color.RED);
-                    g.setFont(new Font("Helvetica", Font.BOLD, 20));
-                    g.drawString("GAME OVER", (getWidth() / 2) - 20, 90); //Despliega "GAME OVER"
+                    g.setFont(new Font("Helvetica", Font.BOLD, 40));
+                    g.drawString("GAME OVER", (getWidth() / 2) - 30, 100); //Despliega "GAME OVER"
                     //Despliega Creditos
                     g.setColor(Color.WHITE);
+                    g.setFont(new Font("Helvetica", Font.BOLD, 20));
                     g.drawString("Marco Ramírez A01191344", (getWidth() / 2) - 50, (getHeight() / 2) - 30);
                     g.drawString("Alfredo Altamirano A011911", (getWidth() / 2) - 50, getHeight() / 2);
                 }
