@@ -51,6 +51,7 @@ public class Juego extends JFrame implements Runnable, KeyListener,
     private int vidas;  //Vidas del juego
     private int incX;    // Incremento en x
     private int incY;    // Incremento en y
+    private int cont;   //Contador para gravedad
     private int velXBola;	// Velocidad de bola en X
     private int velYBola;    // Velocidad de bola en Y
     private int numBolas; // Cuenta las bolas que caen
@@ -80,6 +81,7 @@ public class Juego extends JFrame implements Runnable, KeyListener,
         setSize(800, 700);  //Declara el tamaño del applet
         direccion = 0;  //Direccion Nula
         vidas = 5;  //Numero de vidas
+        cont = 0;   //Cont inicia en 0
         desaparece = false; //Bool inicia en falso
         numBolas = 0;  //Contador empieza en 0
         velXBola = 2;   //Velocidad bola en X
@@ -197,14 +199,11 @@ public class Juego extends JFrame implements Runnable, KeyListener,
 
         //Actualiza la animación de bola al hacer el click, en base al tiempo transcurrido
         if (click) {
-            //Genera un numero random para velocidades
-            Random r = new Random();
-            velXBola = r.nextInt(getHeight() / 8);
-            velYBola = r.nextInt(getWidth() / 8);
-
+            cont++;
             animaBola.actualiza(tiempoTranscurrido);
             bola.setPosX(bola.getPosX() + velXBola);
-            bola.setPosY(bola.getPosY() - (velYBola + 3));
+            bola.setPosY(bola.getPosY() + velYBola);
+            velYBola += cont % 2;
         }
         //Actualiza la animación de canasta cuando se mueve, en base al tiempo transcurrido
         if (direccion != 0) {
@@ -402,6 +401,10 @@ public class Juego extends JFrame implements Runnable, KeyListener,
     public void mousePressed(MouseEvent e) {
         if ((e.getPoint().distance(bola.getPosX(), bola.getPosY()) < bola.getAncho()) && (e.getPoint().distance(bola.getPosX(), bola.getPosY()) >= 0)) {
             click = true; //al presionar mouse sobre bola, variable es verdadera
+            //Genera un numero random para velocidades
+            Random r = new Random();
+            velXBola = r.nextInt(5) + 5;
+            velYBola = -r.nextInt(10) - 5;
         }
     }
 
