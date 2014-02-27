@@ -408,7 +408,7 @@ public class Juego extends JFrame implements Runnable, KeyListener,
             click = true; //al presionar mouse sobre bola, variable es verdadera
             //Genera un numero random para velocidades
             Random r = new Random();
-            velXBola = r.nextInt(6) + 5;
+            velXBola = r.nextInt(6) + 4;
             velYBola = -r.nextInt(6) - 10;
         }
     }
