@@ -92,8 +92,8 @@ public class Juego extends JFrame implements Runnable, KeyListener,
         carga = false; //Empieza en falso hasta que se presiona la letra "C"
         instrucciones = false; //Empieza en falso hasta que se presiona la letra "I"
         sonido = true; //Empieza en true hasta que se presiona la letra "S"
-        int posBX = (getWidth() / 4);	// posision de bola en X es un cuarto del applet
-        int posBY = (getHeight() / 2);    // posicion de bola en Y y es la mitad del applet
+        int posBX = (getWidth() / 4) - 65;	// posision de bola en X es un cuarto del applet
+        int posBY = (getHeight() / 2) + 140;    // posicion de bola en Y y es la mitad del applet
         mouseX = posBX; //posicion del mouse temporal, inicial de la bola en X
         mouseY = posBY; //posicion del mouse temporal, inicial de la bola en Y
         int posCX = (getWidth() / 4);   // posision de canasta en X es un cuarto del applet
@@ -247,11 +247,11 @@ public class Juego extends JFrame implements Runnable, KeyListener,
             if (sonido) {
                 sad.play();  // suena al chocar con el piso
             }
-            posBX = (getWidth() / 4);   // posision x es un cuarto del applet
-            posBY = (getHeight() / 2);    // posicion en y es la mitad del applet
+            posBX = (getWidth() / 4) - 65;	// posicion de bola en X inicial
+            posBY = (getHeight() / 2) + 140;    // posicion de bola en Y inicial
             //Mueve bola a pos inicial en X y Y
-            bola.setPosX(posBX - bola.getAlto());
-            bola.setPosY(posBY - bola.getAncho());
+            bola.setPosY(posBY - bola.getAlto());
+            bola.setPosX(posBX - bola.getAncho());
             click = false;
         }
         //Checa colision de la bola con la parte superior del applet.
@@ -270,11 +270,11 @@ public class Juego extends JFrame implements Runnable, KeyListener,
                 joy.play();    //sad al colisionar
             }
             bola.aumentaConteo();   // Aumenta el score
-            posBX = (getWidth() / 4);   // posision x es un cuarto del applet
-            posBY = (getHeight() / 2);    // posicion en y es la mitad del applet
+            posBX = (getWidth() / 4) - 65;	// posicion de bola en X inicial
+            posBY = (getHeight() / 2) + 140;    // posicion de bola en Y inicial
             //Mueve bola a pos inicial en X y Y
-            bola.setPosX(posBX - bola.getAlto());
-            bola.setPosY(posBY - bola.getAncho());
+            bola.setPosY(posBY - bola.getAlto());
+            bola.setPosX(posBX - bola.getAncho());
             click = false;
         }
     }
@@ -408,8 +408,8 @@ public class Juego extends JFrame implements Runnable, KeyListener,
             click = true; //al presionar mouse sobre bola, variable es verdadera
             //Genera un numero random para velocidades
             Random r = new Random();
-            velXBola = r.nextInt(4) + 5;
-            velYBola = -r.nextInt(10) - 5;
+            velXBola = r.nextInt(6) + 5;
+            velYBola = -r.nextInt(6) - 10;
         }
     }
 
@@ -523,12 +523,12 @@ public class Juego extends JFrame implements Runnable, KeyListener,
                     //Despliega "GAME OVER" y los creditos
                     g.setColor(Color.RED);
                     g.setFont(new Font("Helvetica", Font.BOLD, 40));
-                    g.drawString("GAME OVER", (getWidth() / 2) - 30, 100); //Despliega "GAME OVER"
+                    g.drawString("GAME OVER", (getWidth() / 2) - 50, 100); //Despliega "GAME OVER"
                     //Despliega Creditos
                     g.setColor(Color.WHITE);
                     g.setFont(new Font("Helvetica", Font.BOLD, 20));
-                    g.drawString("Marco Ramírez A01191344", (getWidth() / 2) - 50, (getHeight() / 2) - 30);
-                    g.drawString("Alfredo Altamirano A011911", (getWidth() / 2) - 50, getHeight() / 2);
+                    g.drawString("Marco Ramírez A01191344", (getWidth() / 2) - 90, (getHeight() / 2) - 30);
+                    g.drawString("Alfredo Altamirano A011911", (getWidth() / 2) - 90, getHeight() / 2);
                 }
             } else {
                 //Da un mensaje mientras se carga el dibujo 
