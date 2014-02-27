@@ -2,9 +2,9 @@
  * Clase Bola
  *
  * @author Marco Ramírez A01191344
- * @author Alfredo Altamirano A011911
- * @date 02/25/14
- * @version 1.1
+ * @author Alfredo Altamirano A01191157
+ * @date 02/28/14
+ * @version 1.3
  */
 
 package parabolico;
