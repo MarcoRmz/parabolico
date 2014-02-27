@@ -528,7 +528,7 @@ public class Juego extends JFrame implements Runnable, KeyListener,
                     g.setColor(Color.WHITE);
                     g.setFont(new Font("Helvetica", Font.BOLD, 20));
                     g.drawString("Marco Ramírez A01191344", (getWidth() / 2) - 90, (getHeight() / 2) - 30);
-                    g.drawString("Alfredo Altamirano A011911", (getWidth() / 2) - 90, getHeight() / 2);
+                    g.drawString("Alfredo Altamirano A01191157", (getWidth() / 2) - 90, getHeight() / 2);
                 }
             } else {
                 //Da un mensaje mientras se carga el dibujo 
