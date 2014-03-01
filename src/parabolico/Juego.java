@@ -21,9 +21,18 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import javax.swing.ImageIcon;
 import java.util.Random;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Juego extends JFrame implements Runnable, KeyListener,
         MouseListener, MouseMotionListener {
@@ -40,17 +49,12 @@ public class Juego extends JFrame implements Runnable, KeyListener,
 
     //Variables de control de tiempo de la animación
     private long tiempoActual;
-    private long tiempoInicial;
     int posBX, posBY;
     int posCX, posCY;
 
     private static final long serialVersionUID = 1L;
-    private int mouseX;	//Ubicacion del mouse en x
-    private int mouseY;	//Ubicacion del mouse en y
     private int direccion;  //Variable direccion de canasta
     private int vidas;  //Vidas del juego
-    private int incX;    // Incremento en x
-    private int incY;    // Incremento en y
     private int cont;   //Contador para gravedad
     private int velXBola;	// Velocidad de bola en X
     private int velYBola;    // Velocidad de bola en Y
@@ -92,12 +96,10 @@ public class Juego extends JFrame implements Runnable, KeyListener,
         carga = false; //Empieza en falso hasta que se presiona la letra "C"
         instrucciones = false; //Empieza en falso hasta que se presiona la letra "I"
         sonido = true; //Empieza en true hasta que se presiona la letra "S"
-        int posBX = (getWidth() / 4) - 65;	// posision de bola en X es un cuarto del applet
-        int posBY = (getHeight() / 2) + 140;    // posicion de bola en Y y es la mitad del applet
-        mouseX = posBX; //posicion del mouse temporal, inicial de la bola en X
-        mouseY = posBY; //posicion del mouse temporal, inicial de la bola en Y
-        int posCX = (getWidth() / 4);   // posision de canasta en X es un cuarto del applet
-        int posCY = (getHeight() - (getHeight() / 4));    // posicion de canasta en Y es 3/4 del applet
+        posBX = (getWidth() / 4) - 65;	// posision de bola en X es un cuarto del applet
+        posBY = (getHeight() / 2) + 140;    // posicion de bola en Y y es la mitad del applet
+        posCX = (getWidth() / 4);   // posision de canasta en X es un cuarto del applet
+        posCY = (getHeight() - (getHeight() / 4));    // posicion de canasta en Y es 3/4 del applet
         setBackground(Color.BLUE);
         BKG = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("BKG.png"));
 
@@ -169,7 +171,7 @@ public class Juego extends JFrame implements Runnable, KeyListener,
 
         while (true) {
             //Checa si la variable bool pausa o instrucciones o guarda es diferente a true para detener el juego
-            if (!pausa && !instrucciones && !guarda) {
+            if (!pausa && !instrucciones) {
                 actualiza();
                 checaColision();
             }
@@ -196,7 +198,27 @@ public class Juego extends JFrame implements Runnable, KeyListener,
 
         //Guarda el tiempo actual
         tiempoActual += tiempoTranscurrido;
-
+        
+        //si se presiono la tecla para guardar
+        if(guarda) {
+            try { //se intenta guardar
+                guardar("saveFile.txt"); // se guarda el juego
+            } catch (IOException ex) { //si no se pudo se muestra el error
+                System.out.println("Error al guardar: " + ex);
+            }
+            guarda = false;
+        }
+        
+        //si se presiono la tecla para guardar
+        if(carga) {
+            try { //se intenta cargar
+                cargar("saveFile.txt"); // se carga el juego
+            } catch (FileNotFoundException ex) {//si no se pudo se muestra el error
+                System.out.println("Error al guardar: " + ex);
+            }
+            carga = false;
+        }
+        
         //Actualiza la animación de bola al hacer el click, en base al tiempo transcurrido
         if (click) {
             cont++;
@@ -245,6 +267,7 @@ public class Juego extends JFrame implements Runnable, KeyListener,
         if (bola.getPosY() + bola.getAlto() > getHeight()) {
             numBolas++;
             if (sonido) {
+                sad.stop();  // se detiene el sonido si es que se esta reproduciendo
                 sad.play();  // suena al chocar con el piso
             }
             posBX = (getWidth() / 4) - 65;	// posicion de bola en X inicial
@@ -267,6 +290,7 @@ public class Juego extends JFrame implements Runnable, KeyListener,
         if (canasta.intersecta(bola)) {
             desaparece = true;
             if (sonido) {
+                joy.stop();    //se detiene el sonido si es que se esta reproduciendo
                 joy.play();    //sad al colisionar
             }
             bola.aumentaConteo();   // Aumenta el score
@@ -315,16 +339,16 @@ public class Juego extends JFrame implements Runnable, KeyListener,
      */
     public void keyPressed(KeyEvent e) {
         //Checa si presiona felcha der
-        if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+        if (e.getKeyCode() == KeyEvent.VK_RIGHT && !instrucciones && !guarda && !carga && !pausa) {
             direccion = 1;
         }
         //Checa si presiona flecha izq
-        if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+        if (e.getKeyCode() == KeyEvent.VK_LEFT && !instrucciones && !guarda && !carga && !pausa) {
             direccion = 2;
         }
 
         //Checa si presiona tecla P
-        if (e.getKeyCode() == KeyEvent.VK_P) {
+        if (e.getKeyCode() == KeyEvent.VK_P && !instrucciones && !guarda && !carga) {
             if (pausa) {
                 pausa = false;
             } else {
@@ -333,25 +357,17 @@ public class Juego extends JFrame implements Runnable, KeyListener,
         }
         
         //Checa si presiona tecla G
-        if (e.getKeyCode() == KeyEvent.VK_G) {
-            if (guarda) {
-                guarda = false;
-            } else {
-                guarda = true;
-            }
+        if (e.getKeyCode() == KeyEvent.VK_G && !instrucciones && !guarda && !carga && !pausa) {
+            guarda = true;
         }
 
         //Checa si presiona tecla C
-        if (e.getKeyCode() == KeyEvent.VK_C) {
-            if (carga) {
-                carga = false;
-            } else {
-                carga = true;
-            }
+        if (e.getKeyCode() == KeyEvent.VK_C && !instrucciones && !guarda && !carga && !pausa) {
+            carga = true;
         }
 
         //Checa si presiona tecla I
-        if (e.getKeyCode() == KeyEvent.VK_I) {
+        if (e.getKeyCode() == KeyEvent.VK_I && !guarda && !carga && !pausa) {
             if (instrucciones) {
                 instrucciones = false;
             } else {
@@ -360,9 +376,11 @@ public class Juego extends JFrame implements Runnable, KeyListener,
         }
 
         //Checa si presiona tecla S
-        if (e.getKeyCode() == KeyEvent.VK_S) {
+        if (e.getKeyCode() == KeyEvent.VK_S && !instrucciones && !guarda && !carga && !pausa) {
             if (sonido) {
                 sonido = false;
+                joy.stop();
+                sad.stop();
             } else {
                 sonido = true;
             }
@@ -404,12 +422,14 @@ public class Juego extends JFrame implements Runnable, KeyListener,
      * sobre la bola.
      */
     public void mousePressed(MouseEvent e) {
-        if ((e.getPoint().distance(bola.getPosX(), bola.getPosY()) < bola.getAncho()) && (e.getPoint().distance(bola.getPosX(), bola.getPosY()) >= 0)) {
-            click = true; //al presionar mouse sobre bola, variable es verdadera
-            //Genera un numero random para velocidades
-            Random r = new Random();
-            velXBola = r.nextInt(6) + 4;
-            velYBola = -r.nextInt(6) - 10;
+        if (!instrucciones && !pausa) {
+            if ((e.getPoint().distance(bola.getPosX(), bola.getPosY()) < bola.getAncho()) && (e.getPoint().distance(bola.getPosX(), bola.getPosY()) >= 0)) {
+                click = true; //al presionar mouse sobre bola, variable es verdadera
+                //Genera un numero random para velocidades
+                Random r = new Random();
+                velXBola = r.nextInt(4) + 6;
+                velYBola = -r.nextInt(6) - 11;
+            }
         }
     }
 
@@ -494,7 +514,7 @@ public class Juego extends JFrame implements Runnable, KeyListener,
      */
     public void paint1(Graphics g) {
         //Mientras no este pausado el juego pinta
-        if (!pausa && !instrucciones && !guarda) {
+        if (!pausa && !instrucciones) {
             if (canasta != null && bola != null) {
                 if (vidas > 0) {
                     //Dibuja imagen de fondo
@@ -541,9 +561,6 @@ public class Juego extends JFrame implements Runnable, KeyListener,
             g.setFont(new Font("Helvetica", Font.BOLD, 36));
             g.drawString(canasta.getStr2(), (getWidth() / 2) - 80, (getHeight() / 2) - 20);
         }
-        else if (guarda) {
-            
-        }
         else if (instrucciones) {
             g.setColor(Color.white);
             g.setFont(new Font("Helvetica", Font.BOLD, 20));
@@ -558,6 +575,64 @@ public class Juego extends JFrame implements Runnable, KeyListener,
             g.drawString("-Presiona S para activar/quitar los sonidos", (getWidth() / 2) - 130, (getHeight() / 2) + 90);
             g.drawString("-Presiona G para guardar el juego", (getWidth() / 2) - 130, (getHeight() / 2) + 110);
             g.drawString("-Presiona C para cargar un juego", (getWidth() / 2) - 130, (getHeight() / 2) + 130);
+        }
+    }
+
+    private void guardar(String nombreArchivo) throws IOException {
+        File file = new File(nombreArchivo); // crea un objeto archivo a partir del nombre dado
+        if(!file.exists()) { //si no existe el archivo, lo crea
+            file.createNewFile();
+        }
+        try (PrintWriter writer = new PrintWriter(file, "UTF-8")) { //crea un escritor que se autocierra
+            //guarda todas las variables del juego en un archivo de texto
+            writer.println(direccion);
+            writer.println(vidas);
+            writer.println(cont);
+            writer.println(velXBola);
+            writer.println(velYBola);
+            writer.println(numBolas);
+            writer.println(click);
+            writer.println(pausa);
+            writer.println(desaparece);
+            writer.println(guarda);
+            writer.println(carga);
+            writer.println(instrucciones);
+            writer.println(sonido);
+            
+            //se guardan los objetos bola y canasta
+            bola.guardar(writer);
+            canasta.guardar(writer);
+        }
+    }
+
+    private void cargar(String nombreArchivo) throws FileNotFoundException {
+        File file = new File(nombreArchivo);
+        if(!file.exists()) { //si no existe el archivo
+            throw new FileNotFoundException(); //tira una excepcion
+        }
+        
+        //si hay sonidos, se detienen
+        joy.stop();
+        sad.stop();
+        try (Scanner scanner = new Scanner(file)) { //crea un lector que se autocierra
+            //se cargan todas las variables del juego de un archivo de texto
+            direccion = Integer.parseInt(scanner.nextLine());
+            vidas = Integer.parseInt(scanner.nextLine());
+            cont = Integer.parseInt(scanner.nextLine());
+            velXBola = Integer.parseInt(scanner.nextLine());
+            velYBola = Integer.parseInt(scanner.nextLine());
+            numBolas = Integer.parseInt(scanner.nextLine());
+            click = Boolean.parseBoolean(scanner.nextLine());
+            pausa = Boolean.parseBoolean(scanner.nextLine());
+            desaparece = Boolean.parseBoolean(scanner.nextLine());
+            guarda = Boolean.parseBoolean(scanner.nextLine());
+            carga = Boolean.parseBoolean(scanner.nextLine());
+            instrucciones = Boolean.parseBoolean(scanner.nextLine());
+            sonido = Boolean.parseBoolean(scanner.nextLine());
+            
+            //se cargan los objetos bola y canasta
+            bola.cargar(scanner);
+            canasta.cargar(scanner);
         }
     }
 }

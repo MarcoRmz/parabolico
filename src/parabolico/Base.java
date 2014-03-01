@@ -13,6 +13,8 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.io.PrintWriter;
+import java.util.Scanner;
 
 public class Base {
 
@@ -127,5 +129,25 @@ public class Base {
      */
     public boolean intersecta(Base obj) {
         return getPerimetro().intersects(obj.getPerimetro());
+    }
+    
+    /**
+     * Guarda el objeto en un archivo de texto dado un escritor con un archivo cargado
+     *
+     * @param writer - El objeto para escribir en el archivo
+     */
+    public void guardar(PrintWriter writer) {
+        writer.println(posX);
+        writer.println(posY);
+    }
+    
+    /**
+     * Carga el objeto de un archivo de texto dado un lector con un archivo cargado
+     *
+     * @param scanner - El objetp para leer el archivo
+     */
+    public void cargar(Scanner scanner) {
+        posX = Integer.parseInt(scanner.nextLine());
+        posY = Integer.parseInt(scanner.nextLine());
     }
 }

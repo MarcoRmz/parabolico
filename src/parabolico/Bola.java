@@ -9,6 +9,9 @@
 
 package parabolico;
 
+import java.io.PrintWriter;
+import java.util.Scanner;
+
 public class Bola extends Base {
 
     //Variable contador
@@ -93,5 +96,21 @@ public class Bola extends Base {
      */
     public int getVelocidadY() {
         return velocidadY;
+    }
+
+    //hereda javadoc de base
+    public void guardar(PrintWriter writer) {
+        super.guardar(writer);
+        writer.println(CONT);
+        writer.println(velocidadX);
+        writer.println(velocidadY);
+    }
+
+    //hereda javadoc de base
+    public void cargar(Scanner scanner) {
+        super.cargar(scanner);
+        CONT = Integer.parseInt(scanner.nextLine());
+        velocidadX = Integer.parseInt(scanner.nextLine());
+        velocidadY = Integer.parseInt(scanner.nextLine());
     }
 }

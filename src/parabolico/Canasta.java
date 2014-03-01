@@ -9,6 +9,9 @@
 
 package parabolico;
 
+import java.io.PrintWriter;
+import java.util.Scanner;
+
 public class Canasta extends Base {
 
     //Constantes strings
@@ -46,5 +49,15 @@ public class Canasta extends Base {
      */
     public String getStr2() {
         return STR2;
+    }
+
+    //hereda javadoc de base
+    public void guardar(PrintWriter writer) {
+        super.guardar(writer);
+    }
+
+    //hereda javadoc de base
+    public void cargar(Scanner scanner) {
+        super.cargar(scanner);
     }
 }
