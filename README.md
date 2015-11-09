@@ -1,5 +1,9 @@
 HW for VideoGame class @Tec de Monterrey
+======
+
+## Description
 JFrame implementing a parabolic throw
 
-Marco Ramirez
-Alfredo Altamirano
+## Team
+* Marco Ramirez
+* Alfredo Altamirano
